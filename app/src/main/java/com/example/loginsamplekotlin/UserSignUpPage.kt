@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
@@ -22,12 +23,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
 fun UserSignUpPage(navController: NavController){
+//fun UserSignUpPage(){
 
 //Declaring variables for ValueInputs
     var userId by remember {
@@ -36,11 +39,14 @@ fun UserSignUpPage(navController: NavController){
     var password by remember {
         mutableStateOf("")
     }
+    var confirmPassword by remember {
+        mutableStateOf("")
+    }
     var isPasswordVisible by remember {
         mutableStateOf(false)
     }
     val isFormValid by derivedStateOf {
-        userId.isNotBlank() && password.length >= 7
+        userId.isNotBlank() && password.length >= 7 && confirmPassword == password
     }
 
 //Design Layout Structure
@@ -85,33 +91,37 @@ fun UserSignUpPage(navController: NavController){
 
             //BottomHalf modification made here
             Column(modifier = Modifier
-                .offset(y= (-25).dp)
-                .background(Color.White,shape= RoundedCornerShape(33.dp))
-                .clip(shape= RoundedCornerShape(33.dp))
+                .offset(y = (-60).dp)
+                .background(Color.White, shape = RoundedCornerShape(33.dp))
+                .clip(shape = RoundedCornerShape(33.dp))
             ) {
                 Column(modifier = Modifier
                     .fillMaxSize()
                     .padding(top = 32.dp, start = 30.dp, end = 30.dp)
                 ) {
-                    Text(text = "NotWelcome", fontWeight = FontWeight.Bold, fontSize = 32.sp)
-                    Text(text = "Back", fontWeight = FontWeight.Bold, fontSize = 32.sp)
-
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "Switch to Admin",
-                            modifier = Modifier
-                                .offset(y= (-5).dp,x = (-5).dp))
-                    }
+                    Text(text = "Let's get", fontWeight = FontWeight.Bold, fontSize = 32.sp)
+                    Text(text = "started", fontWeight = FontWeight.Bold, fontSize = 32.sp)
                     Column(
                         Modifier.fillMaxSize(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        OutlinedTextField(
+//User Id TextField
+                        TextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = userId,
-                            onValueChange ={userId = it},
+                            onValueChange ={userId = it},/////////////
                             label = { Text(text = "User-Id") },
+                            colors = TextFieldDefaults.textFieldColors(//new modifications////////
+                                backgroundColor = Color.Transparent,
+                            ),
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Email,
+                                    contentDescription = "null"
+                                )
+                            },
                             singleLine = true,
                             trailingIcon = {
                                 if (userId.isNotBlank())
@@ -124,12 +134,29 @@ fun UserSignUpPage(navController: NavController){
                             }
                         )//UserId Outlined Text Field ends
 
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
+                        Spacer(modifier = Modifier.weight(.05f))
+//Password TextField
+                        TextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = password,
-                            onValueChange = {password = it} ,
+                            onValueChange ={password = it},/////////////
                             label = { Text(text = "Password") },
+                            colors = TextFieldDefaults.textFieldColors(//new modifications////////
+                                backgroundColor = Color.Transparent,
+                            ),
+                            singleLine = true
+                        )//Password Text Field ends
+
+                        Spacer(modifier = Modifier.weight(.05f))
+//Confirm Password TextField
+                        TextField(
+                            modifier = Modifier.fillMaxWidth(),
+                            value = confirmPassword,
+                            onValueChange = {confirmPassword = it} ,
+                            label = { Text(text = "Confirm Password") },
+                            colors = TextFieldDefaults.textFieldColors(//new modifications////////
+                                backgroundColor = Color.Transparent,
+                            ),
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                             visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
@@ -141,39 +168,54 @@ fun UserSignUpPage(navController: NavController){
                                     )
                                 }
                             }
-                        )//Password Outlined Text Field ends
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Row( modifier = Modifier
-                            .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = "Sign In",
-                                fontSize = 25.sp,
-                                modifier = Modifier.offset(x = 5.dp, y = 5.dp))
+                        )//Confirm Password Text Field ends
+//Sign Up Button
+                        Spacer(modifier = Modifier.weight(.08f))
+//Google SignUp Button
                             Button(onClick = {/*TODO*/},
                                 enabled = isFormValid,
                                 modifier = Modifier
-                                    .height(60.dp)
-                                    .width(60.dp),
+                                    .fillMaxWidth()
+                                    .fillMaxHeight(.16f),
                                 shape = RoundedCornerShape(50.dp),
-                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
                             ){
-                                Image(painter = painterResource(id = R.drawable.arrow), contentDescription ="sign_in_logo",
-                                    modifier = Modifier.weight(.7f)
-                                )
+                                Text(text = "Sign up")
                             }
+                        Spacer(modifier = Modifier.weight(.02f))
+                            Row(horizontalArrangement = Arrangement.Center) {
+                                Text(text = "or continue with")
+                            }
+                        Spacer(modifier = Modifier.weight(.02f))
+                        Button(onClick = {/*TODO*/},
+                            enabled = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight(.23f),
+                            shape = RoundedCornerShape(50.dp),
+                        ){
+                            Text(text = "Google")
                         }
                         Spacer(modifier = Modifier.weight(1f))
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.Bottom
                         ) {
-                            TextButton(onClick = { /*TODO*/ }) {
-                                Text(text = "SignUp")
-                            }
-                            TextButton(onClick = { /*TODO*/ }) {
-                                Text(text = "Forgot Password?" ,color = Color.Gray)
+                            Text(text = "Already have an account?",
+                                modifier = Modifier.offset(y = (-13).dp))
+//Login Text Button
+                            TextButton(
+                                onClick = {
+                                    navController.navigate("user_signup_page"){
+                                    popUpTo(navController.graph.startDestinationId)
+                                        launchSingleTop = true
+                                    }
+                                }
+                            ) {
+                                Text(text = "Login",
+                                    modifier = Modifier
+                                        .offset(x=(-6).dp))
                             }
                         }
                     }//Inside Column-Card
@@ -183,4 +225,9 @@ fun UserSignUpPage(navController: NavController){
         }//Main Column Ends here
     }//Scaffold Ends here
 }
-
+//
+//@Composable
+//@Preview(showBackground = true)
+//fun UserSignUpPageTheme(){
+//    UserSignUpPage()
+//}

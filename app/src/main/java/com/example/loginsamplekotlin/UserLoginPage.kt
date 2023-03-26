@@ -8,6 +8,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -29,6 +31,7 @@ import androidx.navigation.NavController
 
 @Composable
 fun UserLoginPage(navController: NavController){
+//fun UserLoginPage(){
 
 //Declaring variables for ValueInputs
     var userId by remember {
@@ -86,9 +89,9 @@ fun UserLoginPage(navController: NavController){
 
             //BottomHalf modification made here
             Column(modifier = Modifier
-                .offset(y= (-25).dp)
-                .background(Color.White,shape= RoundedCornerShape(33.dp))
-                .clip(shape= RoundedCornerShape(33.dp))
+                .offset(y = (-60).dp)
+                .background(Color.White, shape = RoundedCornerShape(33.dp))
+                .clip(shape = RoundedCornerShape(33.dp))
             ) {
                 Column(modifier = Modifier
                     .fillMaxSize()
@@ -96,15 +99,24 @@ fun UserLoginPage(navController: NavController){
                 ) {
                     Text(text = "Welcome", fontWeight = FontWeight.Bold, fontSize = 32.sp)
                     Text(text = "Back", fontWeight = FontWeight.Bold, fontSize = 32.sp)
-
-                    TextButton(onClick = {
-                        navController.navigate("admin_login_page"){
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    } }) {
-                        Text(text = "Switch to Admin",
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                    TextButton(
+                        onClick = {
+                            navController.navigate("admin_login_page"){
+                            popUpTo(navController.graph.startDestinationId)
+                            launchSingleTop = true
+                            }
+                        }
+                    ) {
+                        Text(
+                            text = "Switch to Admin",
                             modifier = Modifier
-                                .offset(y= (-5).dp,x = (-5).dp))
+                                .offset(y = (-5).dp, x = (-6).dp)
+                        )
+                    }
+                        Image(painter = painterResource(id = R.drawable.arrow_right), contentDescription = "null",
+                            modifier = Modifier.offset(x = (-8).dp,y=16.dp))
+
                     }
                     Column(
                         Modifier.fillMaxSize(),
@@ -112,10 +124,19 @@ fun UserLoginPage(navController: NavController){
                         verticalArrangement = Arrangement.Center
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
-                        OutlinedTextField(
+                        TextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = userId,
                             onValueChange ={userId = it},
+                            colors = TextFieldDefaults.textFieldColors(//new modifications////////
+                                backgroundColor = Color.Transparent,
+                            ),
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Email,
+                                    contentDescription = "null"
+                                )
+                            },
                             label = { Text(text = "User-Id") },
                             singleLine = true,
                             trailingIcon = {
@@ -130,10 +151,13 @@ fun UserLoginPage(navController: NavController){
                         )//UserId Outlined Text Field ends
 
                         Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
+                        TextField(
                             modifier = Modifier.fillMaxWidth(),
                             value = password,
                             onValueChange = {password = it} ,
+                            colors = TextFieldDefaults.textFieldColors(//new modifications////////
+                                backgroundColor = Color.Transparent,
+                            ),
                             label = { Text(text = "Password") },
                             singleLine = true,
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
@@ -148,18 +172,21 @@ fun UserLoginPage(navController: NavController){
                             }
                         )//Password Outlined Text Field ends
 
-                        Spacer(modifier = Modifier.height(16.dp))
                         Row( modifier = Modifier
                             .fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween) {
-                            Text(text = "Sign In",
-                                fontSize = 25.sp,
-                                modifier = Modifier.offset(x = 5.dp, y = 5.dp))
+                            TextButton(onClick = { /*TODO*/ }) {
+                                Text(
+                                    text = "Forgot Password?",
+                                    color = Color.Black,
+                                modifier = Modifier.offset(y = (-8).dp))
+                            }
                             Button(onClick = {/*TODO*/},
                                 enabled = isFormValid,
                                 modifier = Modifier
                                     .height(60.dp)
-                                    .width(60.dp),
+                                    .width(60.dp)
+                                    .offset(y = 12.dp),
                                 shape = RoundedCornerShape(50.dp),
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Blue)
                             ){
@@ -172,8 +199,11 @@ fun UserLoginPage(navController: NavController){
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.Bottom
                         ) {
+                            Text(text = "Don't have an account yet?",
+                            modifier = Modifier.offset(y = (-13).dp))
                             TextButton(
                                 onClick = {
                                     navController.navigate("user_signup_page"){
@@ -182,10 +212,9 @@ fun UserLoginPage(navController: NavController){
                                     }
                                 }
                             ) {
-                                Text(text = "SignUp")
-                            }
-                            TextButton(onClick = { /*TODO*/ }) {
-                                Text(text = "Forgot Password?" ,color = Color.Gray)
+                                Text(
+                                    text = "Register"
+                                )
                             }
                         }
                     }//Inside Column-Card
@@ -195,4 +224,9 @@ fun UserLoginPage(navController: NavController){
         }//Main Column Ends here
     }//Scaffold Ends here
 }
-
+//@Composable
+//@Preview(showBackground = true)
+//fun UserLoginPageTheme(){
+//    UserLoginPage()
+//}
+//
